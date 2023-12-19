@@ -1,9 +1,11 @@
 // Local storage array
+
 const LsCheck = localStorage.getItem("items");
 const itemsLs = LsCheck === null ? [] : JSON.parse(LsCheck);
 console.log(itemsLs);
 
 // function to for finding items by id
+
 const findItemById = (id) => {
   return itemsLs.find((element) => element.id === id);
 };
@@ -12,10 +14,6 @@ console.log(findItemById("1"));
 // containers
 
 const formContainer = document.createElement("form");
-formContainer.style.width = "50%";
-formContainer.style.margin = "10px";
-formContainer.style.display = "flex";
-formContainer.style.flexDirection = "column";
 
 const tableContainer = document.createElement("div");
 tableContainer.setAttribute("id", "tableContainer");
@@ -77,8 +75,7 @@ function clearInputFields() {
 // table function #1
 
 function createAllItemsTable() {
-  // parametras "container" pridetas kad padarytu atskira table pagal konteineri
-  const tableCheck = document.querySelector("#allItemsTable"); // line 80
+  const tableCheck = document.querySelector("#allItemsTable"); // line 85
 
   if (tableCheck) {
     tableCheck.remove();
@@ -92,7 +89,7 @@ function createAllItemsTable() {
     const row = document.createElement("tr");
     const cell = document.createElement("td");
     const cellText = document.createTextNode(
-      `${el.id}, ${el.name}, ${el.quantity}`,
+      `id: ${el.id} | name: ${el.name} | quantity: ${el.quantity}`,
     );
     cell.appendChild(cellText);
     row.appendChild(cell);
@@ -101,36 +98,40 @@ function createAllItemsTable() {
 
   table.appendChild(tableBody);
   allItemsTableContainer.appendChild(table);
-  table.setAttribute("border", "2");
+  table.setAttribute("border", "3");
 }
 
-// table functions #2 (find items)
+// table function #2 (find items)
 
 function createFoundItemTable(items) {
-  const tableCheck = document.querySelector("#FoundItemTable"); // line 117
+  const tableCheck = document.querySelector("#foundItemTable"); // line 112
 
-  if (tableCheck) {
-    tableCheck.remove();
+  if (!tableCheck) {
+    // If table does not exist, create a new one
+    const table = document.createElement("table");
+    table.setAttribute("id", "foundItemTable");
+    const tableBody = document.createElement("tbody");
+    table.appendChild(tableBody);
+    foundItemTableContainer.appendChild(table);
+    table.setAttribute("border", "3");
   }
 
-  const table = document.createElement("table");
-  table.setAttribute("id", "foundItemTable");
-  const tableBody = document.createElement("tbody");
+  // recheck if table exists (if this is missing, on the first query table wont be displayed, only after 2nd query)
+  const updatedTableCheck = document.querySelector("#foundItemTable");
 
+  // Append a new row for each item
   items.forEach((el) => {
     const row = document.createElement("tr");
     const cell = document.createElement("td");
     const cellText = document.createTextNode(
-      `${el.id}, ${el.name}, ${el.quantity}`,
+      `id: ${el.id} | name: ${el.name} | quantity: ${el.quantity}`,
     );
     cell.appendChild(cellText);
     row.appendChild(cell);
-    tableBody.appendChild(row);
-  });
 
-  table.appendChild(tableBody);
-  foundItemTableContainer.appendChild(table);
-  table.setAttribute("border", "2");
+    // Append the row to the existing table
+    updatedTableCheck.querySelector("tbody").appendChild(row);
+  });
 }
 
 // events for button #1 (ADD ITEM)
